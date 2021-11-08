@@ -28,7 +28,7 @@ Data Stack size         : 512
 #include <delay.h>
 
 // Declare your global variables here
-
+int i=0;
 void main(void)
 {
 // Declare your local variables here
@@ -150,14 +150,16 @@ while (1)
       lcd_clear();
       lcd_gotoxy(0,0);
       lcd_puts("tes tes tes");
-      delay_ms(100);
+      delay_ms(30);
       if(PINA.3==0){
         lcd_clear();
         lcd_gotoxy(0,0);
         lcd_puts("CEK");
         delay_ms(100);
       }
-      PORTC=46;
+      
+         PORTC=i;
+         i++;
       
       }
 }

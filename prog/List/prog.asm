@@ -1069,9 +1069,10 @@ __DELAY_USW_LOOP:
 	.ENDM
 
 ;NAME DEFINITIONS FOR GLOBAL VARIABLES ALLOCATED TO REGISTERS
-	.DEF __lcd_x=R5
-	.DEF __lcd_y=R4
-	.DEF __lcd_maxx=R7
+	.DEF _i=R4
+	.DEF __lcd_x=R7
+	.DEF __lcd_y=R6
+	.DEF __lcd_maxx=R9
 
 	.CSEG
 	.ORG 0x00
@@ -1102,6 +1103,8 @@ __START_OF_CODE:
 	JMP  0x00
 	JMP  0x00
 
+_0x9:
+	.DB  0x0,0x0
 _0x0:
 	.DB  0x74,0x65,0x73,0x20,0x74,0x65,0x73,0x20
 	.DB  0x74,0x65,0x73,0x0,0x43,0x45,0x4B,0x0
@@ -1116,6 +1119,10 @@ __GLOBAL_INI_TBL:
 	.DW  0x04
 	.DW  _0x6+12
 	.DW  _0x0*2+12
+
+	.DW  0x02
+	.DW  0x04
+	.DW  _0x9*2
 
 	.DW  0x02
 	.DW  __base_y_G100
@@ -1242,7 +1249,7 @@ __GLOBAL_INI_END:
 ;#include <delay.h>
 ;
 ;// Declare your global variables here
-;
+;int i=0;
 ;void main(void)
 ; 0000 0021 {
 
@@ -1413,8 +1420,10 @@ _0x3:
 ; 0000 0097       lcd_gotoxy(0,0);
 ; 0000 0098       lcd_puts("tes tes tes");
 	__POINTW2MN _0x6,0
+	RCALL _lcd_puts
+; 0000 0099       delay_ms(30);
+	LDI  R26,LOW(30)
 	RCALL SUBOPT_0x1
-; 0000 0099       delay_ms(100);
 ; 0000 009A       if(PINA.3==0){
 	SBIC 0x19,3
 	RJMP _0x7
@@ -1423,17 +1432,23 @@ _0x3:
 ; 0000 009C         lcd_gotoxy(0,0);
 ; 0000 009D         lcd_puts("CEK");
 	__POINTW2MN _0x6,12
-	RCALL SUBOPT_0x1
+	RCALL _lcd_puts
 ; 0000 009E         delay_ms(100);
+	LDI  R26,LOW(100)
+	RCALL SUBOPT_0x1
 ; 0000 009F       }
-; 0000 00A0       PORTC=0x46;
+; 0000 00A0 
+; 0000 00A1          PORTC=i;
 _0x7:
-	LDI  R30,LOW(70)
-	OUT  0x15,R30
-; 0000 00A1 
-; 0000 00A2       }
+	OUT  0x15,R4
+; 0000 00A2          i++;
+	MOVW R30,R4
+	ADIW R30,1
+	MOVW R4,R30
+; 0000 00A3 
+; 0000 00A4       }
 	RJMP _0x3
-; 0000 00A3 }
+; 0000 00A5 }
 _0x8:
 	RJMP _0x8
 
@@ -1491,41 +1506,43 @@ _lcd_gotoxy:
 	LDD  R26,Y+1
 	ADD  R26,R30
 	RCALL __lcd_write_data
-	LDD  R5,Y+1
-	LDD  R4,Y+0
+	LDD  R7,Y+1
+	LDD  R6,Y+0
 	ADIW R28,2
 	RET
 _lcd_clear:
 	LDI  R26,LOW(2)
-	RCALL SUBOPT_0x2
+	RCALL __lcd_write_data
+	LDI  R26,LOW(3)
+	RCALL SUBOPT_0x1
 	LDI  R26,LOW(12)
 	RCALL __lcd_write_data
 	LDI  R26,LOW(1)
-	RCALL SUBOPT_0x2
+	RCALL __lcd_write_data
+	LDI  R26,LOW(3)
+	RCALL SUBOPT_0x1
 	LDI  R30,LOW(0)
-	MOV  R4,R30
-	MOV  R5,R30
+	MOV  R6,R30
+	MOV  R7,R30
 	RET
 _lcd_putchar:
 	ST   -Y,R26
 	LD   R26,Y
 	CPI  R26,LOW(0xA)
 	BREQ _0x2000005
-	CP   R5,R7
+	CP   R7,R9
 	BRLO _0x2000004
 _0x2000005:
 	LDI  R30,LOW(0)
 	ST   -Y,R30
-	INC  R4
-	MOV  R26,R4
+	INC  R6
+	MOV  R26,R6
 	RCALL _lcd_gotoxy
 	LD   R26,Y
 	CPI  R26,LOW(0xA)
-	BRNE _0x2000007
-	RJMP _0x2020001
-_0x2000007:
+	BREQ _0x2020001
 _0x2000004:
-	INC  R5
+	INC  R7
 	SBI  0x1B,0
 	LD   R26,Y
 	RCALL __lcd_write_data
@@ -1562,7 +1579,7 @@ _lcd_init:
 	CBI  0x1B,2
 	CBI  0x1B,0
 	CBI  0x1B,1
-	LDD  R7,Y+0
+	LDD  R9,Y+0
 	LD   R30,Y
 	SUBI R30,-LOW(128)
 	__PUTB1MN __base_y_G100,2
@@ -1570,11 +1587,10 @@ _lcd_init:
 	SUBI R30,-LOW(192)
 	__PUTB1MN __base_y_G100,3
 	LDI  R26,LOW(20)
-	LDI  R27,0
-	CALL _delay_ms
-	RCALL SUBOPT_0x3
-	RCALL SUBOPT_0x3
-	RCALL SUBOPT_0x3
+	RCALL SUBOPT_0x1
+	RCALL SUBOPT_0x2
+	RCALL SUBOPT_0x2
+	RCALL SUBOPT_0x2
 	LDI  R26,LOW(32)
 	RCALL __lcd_write_nibble_G100
 	__DELAY_USW 400
@@ -1604,22 +1620,13 @@ SUBOPT_0x0:
 	LDI  R26,LOW(0)
 	RJMP _lcd_gotoxy
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
+;OPTIMIZER ADDED SUBROUTINE, CALLED 5 TIMES, CODE SIZE REDUCTION:9 WORDS
 SUBOPT_0x1:
-	RCALL _lcd_puts
-	LDI  R26,LOW(100)
-	LDI  R27,0
-	JMP  _delay_ms
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x2:
-	RCALL __lcd_write_data
-	LDI  R26,LOW(3)
 	LDI  R27,0
 	JMP  _delay_ms
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:7 WORDS
-SUBOPT_0x3:
+SUBOPT_0x2:
 	LDI  R26,LOW(48)
 	RCALL __lcd_write_nibble_G100
 	__DELAY_USW 400

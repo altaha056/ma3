@@ -52,7 +52,7 @@
 ;#include <delay.h>
 ;
 ;// Declare your global variables here
-;
+;int i=0;
 ;void main(void)
 ; 0000 0021 {
 
@@ -256,7 +256,7 @@
 ;PCODE: $0000005A VOL: 0
 ;PCODE: $0000005B VOL: 0
 ;PCODE: $0000005C VOL: 0
-; 0000 0099       delay_ms(100);
+; 0000 0099       delay_ms(30);
 ;PCODE: $0000005D VOL: 0
 ;PCODE: $0000005E VOL: 0
 ;PCODE: $0000005F VOL: 0
@@ -280,18 +280,23 @@
 ;PCODE: $0000006C VOL: 0
 ;PCODE: $0000006D VOL: 0
 ; 0000 009F       }
-; 0000 00A0       PORTC=0x46;
+; 0000 00A0 
+; 0000 00A1          PORTC=i;
 ;PCODE: $0000006E VOL: 0
 ;PCODE: $0000006F VOL: 0
 ;PCODE: $00000070 VOL: 0
-; 0000 00A1 
-; 0000 00A2       }
+; 0000 00A2          i++;
 ;PCODE: $00000071 VOL: 0
 ;PCODE: $00000072 VOL: 0
-; 0000 00A3 }
 ;PCODE: $00000073 VOL: 0
+; 0000 00A3 
+; 0000 00A4       }
 ;PCODE: $00000074 VOL: 0
 ;PCODE: $00000075 VOL: 0
+; 0000 00A5 }
+;PCODE: $00000076 VOL: 0
+;PCODE: $00000077 VOL: 0
+;PCODE: $00000078 VOL: 0
 
 	.DSEG
 _0x6:
