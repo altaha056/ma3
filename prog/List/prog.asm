@@ -1113,11 +1113,13 @@ _0x3:
 	.DB  0x40,0x41,0x42,0x43,0x44,0x45,0x46,0x47
 	.DB  0x48,0x49,0x50,0x51,0x52,0x53,0x54,0x55
 	.DB  0x56,0x57,0x58,0x59
-_0xB:
+_0xD:
 	.DB  0x0,0x0
 _0x0:
-	.DB  0x64,0x65,0x74,0x69,0x6B,0x20,0x6B,0x65
-	.DB  0x2D,0x0,0x43,0x45,0x4B,0x0
+	.DB  0x43,0x45,0x4B,0x0,0x73,0x61,0x61,0x74
+	.DB  0x6E,0x79,0x61,0x20,0x62,0x61,0x6E,0x67
+	.DB  0x75,0x6E,0x0,0x64,0x65,0x74,0x69,0x6B
+	.DB  0x20,0x6B,0x65,0x2D,0x0
 _0x2000060:
 	.DB  0x1
 _0x2000000:
@@ -1131,17 +1133,21 @@ __GLOBAL_INI_TBL:
 	.DW  _angka
 	.DW  _0x3*2
 
-	.DW  0x0A
-	.DW  _0x7
+	.DW  0x04
+	.DW  _0x8
 	.DW  _0x0*2
 
-	.DW  0x04
-	.DW  _0x7+10
-	.DW  _0x0*2+10
+	.DW  0x0F
+	.DW  _0x8+4
+	.DW  _0x0*2+4
+
+	.DW  0x0A
+	.DW  _0x8+19
+	.DW  _0x0*2+19
 
 	.DW  0x02
 	.DW  0x06
-	.DW  _0xB*2
+	.DW  _0xD*2
 
 	.DW  0x01
 	.DW  __seed_G100
@@ -1453,91 +1459,113 @@ _main:
 ; 0000 009F while (1)
 _0x4:
 ; 0000 00A0       {
-; 0000 00A1       lcd_clear();
-	CALL SUBOPT_0x0
-; 0000 00A2       lcd_gotoxy(0,0);
-; 0000 00A3       itoa(detik,tampil);
-	ST   -Y,R5
-	ST   -Y,R4
-	LDI  R26,LOW(_tampil)
-	LDI  R27,HIGH(_tampil)
-	CALL _itoa
-; 0000 00A4       lcd_puts("detik ke-");
-	__POINTW2MN _0x7,0
-	CALL _lcd_puts
-; 0000 00A5       lcd_gotoxy(0,10);
-	LDI  R30,LOW(0)
-	ST   -Y,R30
-	LDI  R26,LOW(10)
-	CALL _lcd_gotoxy
-; 0000 00A6       lcd_puts(tampil);
-	LDI  R26,LOW(_tampil)
-	LDI  R27,HIGH(_tampil)
-	CALL _lcd_puts
-; 0000 00A7 
-; 0000 00A8       delay_ms(30);
-	LDI  R26,LOW(30)
-	CALL SUBOPT_0x1
-; 0000 00A9       if(PINA.3==0){
+; 0000 00A1 
+; 0000 00A2       if(PINA.3==0){
 	SBIC 0x19,3
-	RJMP _0x8
-; 0000 00AA         lcd_clear();
+	RJMP _0x7
+; 0000 00A3         lcd_clear();
 	CALL SUBOPT_0x0
-; 0000 00AB         lcd_gotoxy(0,0);
-; 0000 00AC         lcd_puts("CEK");
-	__POINTW2MN _0x7,10
+; 0000 00A4         lcd_gotoxy(0,0);
+; 0000 00A5         lcd_puts("CEK");
+	__POINTW2MN _0x8,0
 	CALL _lcd_puts
-; 0000 00AD         delay_ms(100);
+; 0000 00A6         delay_ms(100);
 	LDI  R26,LOW(100)
 	CALL SUBOPT_0x1
-; 0000 00AE       }
-; 0000 00AF 
-; 0000 00B0       detik++;
-_0x8:
+; 0000 00A7       }
+; 0000 00A8 
+; 0000 00A9       detik++;
+_0x7:
 	MOVW R30,R4
 	ADIW R30,1
 	MOVW R4,R30
-; 0000 00B1       PORTC=angka[detik];
+; 0000 00AA       PORTC=angka[detik];
 	LDI  R26,LOW(_angka)
 	LDI  R27,HIGH(_angka)
 	ADD  R26,R4
 	ADC  R27,R5
 	LD   R30,X
 	OUT  0x15,R30
-; 0000 00B2 
-; 0000 00B3 
-; 0000 00B4       if(detik==60){
+; 0000 00AB 
+; 0000 00AC 
+; 0000 00AD       if(detik==60){
 	LDI  R30,LOW(60)
 	LDI  R31,HIGH(60)
 	CP   R30,R4
 	CPC  R31,R5
 	BRNE _0x9
-; 0000 00B5         detik=0;
+; 0000 00AE         detik=0;
 	CLR  R4
 	CLR  R5
-; 0000 00B6         menit++;
+; 0000 00AF         menit++;
 	MOVW R30,R6
 	ADIW R30,1
 	MOVW R6,R30
-; 0000 00B7         PORTD=angka[menit];
+; 0000 00B0         PORTD=angka[menit];
 	LDI  R26,LOW(_angka)
 	LDI  R27,HIGH(_angka)
 	ADD  R26,R6
 	ADC  R27,R7
 	LD   R30,X
 	OUT  0x12,R30
-; 0000 00B8       }
-; 0000 00B9 
-; 0000 00BA       }
+; 0000 00B1       }
+; 0000 00B2       if(menit==1){
 _0x9:
-	RJMP _0x4
-; 0000 00BB }
+	LDI  R30,LOW(1)
+	LDI  R31,HIGH(1)
+	CP   R30,R6
+	CPC  R31,R7
+	BRNE _0xA
+; 0000 00B3         lcd_clear();
+	CALL SUBOPT_0x0
+; 0000 00B4         lcd_gotoxy(0,0);
+; 0000 00B5         lcd_puts("saatnya bangun");
+	__POINTW2MN _0x8,4
+	CALL _lcd_puts
+; 0000 00B6       }
+; 0000 00B7       if(menit!=1){
 _0xA:
-	RJMP _0xA
+	LDI  R30,LOW(1)
+	LDI  R31,HIGH(1)
+	CP   R30,R6
+	CPC  R31,R7
+	BREQ _0xB
+; 0000 00B8         lcd_clear();
+	CALL SUBOPT_0x0
+; 0000 00B9         lcd_gotoxy(0,0);
+; 0000 00BA         itoa(detik,tampil);
+	ST   -Y,R5
+	ST   -Y,R4
+	LDI  R26,LOW(_tampil)
+	LDI  R27,HIGH(_tampil)
+	CALL _itoa
+; 0000 00BB         lcd_puts("detik ke-");
+	__POINTW2MN _0x8,19
+	CALL _lcd_puts
+; 0000 00BC         lcd_gotoxy(0,10);
+	LDI  R30,LOW(0)
+	ST   -Y,R30
+	LDI  R26,LOW(10)
+	CALL _lcd_gotoxy
+; 0000 00BD         lcd_puts(tampil);
+	LDI  R26,LOW(_tampil)
+	LDI  R27,HIGH(_tampil)
+	CALL _lcd_puts
+; 0000 00BE       }
+; 0000 00BF 
+; 0000 00C0       delay_ms(30);
+_0xB:
+	LDI  R26,LOW(30)
+	CALL SUBOPT_0x1
+; 0000 00C1       }
+	RJMP _0x4
+; 0000 00C2 }
+_0xC:
+	RJMP _0xC
 
 	.DSEG
-_0x7:
-	.BYTE 0xE
+_0x8:
+	.BYTE 0x1D
 
 	.CSEG
 _itoa:
@@ -1769,7 +1797,7 @@ __base_y_G101:
 	.BYTE 0x4
 
 	.CSEG
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
+;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:7 WORDS
 SUBOPT_0x0:
 	CALL _lcd_clear
 	LDI  R30,LOW(0)

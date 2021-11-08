@@ -258,93 +258,116 @@
 ; 0000 009F while (1)
 ;PCODE: $00000054 VOL: 0
 ; 0000 00A0       {
-; 0000 00A1       lcd_clear();
+; 0000 00A1 
+; 0000 00A2       if(PINA.3==0){
 ;PCODE: $00000055 VOL: 0
-; 0000 00A2       lcd_gotoxy(0,0);
 ;PCODE: $00000056 VOL: 0
 ;PCODE: $00000057 VOL: 0
+; 0000 00A3         lcd_clear();
 ;PCODE: $00000058 VOL: 0
+; 0000 00A4         lcd_gotoxy(0,0);
 ;PCODE: $00000059 VOL: 0
-; 0000 00A3       itoa(detik,tampil);
 ;PCODE: $0000005A VOL: 0
 ;PCODE: $0000005B VOL: 0
 ;PCODE: $0000005C VOL: 0
-; 0000 00A4       lcd_puts("detik ke-");
+; 0000 00A5         lcd_puts("CEK");
 ;PCODE: $0000005D VOL: 0
 ;PCODE: $0000005E VOL: 0
 ;PCODE: $0000005F VOL: 0
-; 0000 00A5       lcd_gotoxy(0,10);
+; 0000 00A6         delay_ms(100);
 ;PCODE: $00000060 VOL: 0
 ;PCODE: $00000061 VOL: 0
 ;PCODE: $00000062 VOL: 0
+; 0000 00A7       }
+; 0000 00A8 
+; 0000 00A9       detik++;
 ;PCODE: $00000063 VOL: 0
-; 0000 00A6       lcd_puts(tampil);
 ;PCODE: $00000064 VOL: 0
 ;PCODE: $00000065 VOL: 0
-; 0000 00A7 
-; 0000 00A8       delay_ms(30);
 ;PCODE: $00000066 VOL: 0
+; 0000 00AA       PORTC=angka[detik];
 ;PCODE: $00000067 VOL: 0
 ;PCODE: $00000068 VOL: 0
-; 0000 00A9       if(PINA.3==0){
 ;PCODE: $00000069 VOL: 0
 ;PCODE: $0000006A VOL: 0
+; 0000 00AB 
+; 0000 00AC 
+; 0000 00AD       if(detik==60){
 ;PCODE: $0000006B VOL: 0
-; 0000 00AA         lcd_clear();
 ;PCODE: $0000006C VOL: 0
-; 0000 00AB         lcd_gotoxy(0,0);
 ;PCODE: $0000006D VOL: 0
+; 0000 00AE         detik=0;
 ;PCODE: $0000006E VOL: 0
+; 0000 00AF         menit++;
 ;PCODE: $0000006F VOL: 0
 ;PCODE: $00000070 VOL: 0
-; 0000 00AC         lcd_puts("CEK");
 ;PCODE: $00000071 VOL: 0
+; 0000 00B0         PORTD=angka[menit];
 ;PCODE: $00000072 VOL: 0
 ;PCODE: $00000073 VOL: 0
-; 0000 00AD         delay_ms(100);
 ;PCODE: $00000074 VOL: 0
 ;PCODE: $00000075 VOL: 0
+; 0000 00B1       }
+; 0000 00B2       if(menit==1){
 ;PCODE: $00000076 VOL: 0
-; 0000 00AE       }
-; 0000 00AF 
-; 0000 00B0       detik++;
 ;PCODE: $00000077 VOL: 0
 ;PCODE: $00000078 VOL: 0
 ;PCODE: $00000079 VOL: 0
+; 0000 00B3         lcd_clear();
 ;PCODE: $0000007A VOL: 0
-; 0000 00B1       PORTC=angka[detik];
+; 0000 00B4         lcd_gotoxy(0,0);
 ;PCODE: $0000007B VOL: 0
 ;PCODE: $0000007C VOL: 0
 ;PCODE: $0000007D VOL: 0
 ;PCODE: $0000007E VOL: 0
-; 0000 00B2 
-; 0000 00B3 
-; 0000 00B4       if(detik==60){
+; 0000 00B5         lcd_puts("saatnya bangun");
 ;PCODE: $0000007F VOL: 0
 ;PCODE: $00000080 VOL: 0
 ;PCODE: $00000081 VOL: 0
-; 0000 00B5         detik=0;
+; 0000 00B6       }
+; 0000 00B7       if(menit!=1){
 ;PCODE: $00000082 VOL: 0
-; 0000 00B6         menit++;
 ;PCODE: $00000083 VOL: 0
 ;PCODE: $00000084 VOL: 0
 ;PCODE: $00000085 VOL: 0
-; 0000 00B7         PORTD=angka[menit];
+; 0000 00B8         lcd_clear();
 ;PCODE: $00000086 VOL: 0
+; 0000 00B9         lcd_gotoxy(0,0);
 ;PCODE: $00000087 VOL: 0
 ;PCODE: $00000088 VOL: 0
 ;PCODE: $00000089 VOL: 0
-; 0000 00B8       }
-; 0000 00B9 
-; 0000 00BA       }
 ;PCODE: $0000008A VOL: 0
+; 0000 00BA         itoa(detik,tampil);
 ;PCODE: $0000008B VOL: 0
 ;PCODE: $0000008C VOL: 0
-; 0000 00BB }
 ;PCODE: $0000008D VOL: 0
+; 0000 00BB         lcd_puts("detik ke-");
 ;PCODE: $0000008E VOL: 0
 ;PCODE: $0000008F VOL: 0
+;PCODE: $00000090 VOL: 0
+; 0000 00BC         lcd_gotoxy(0,10);
+;PCODE: $00000091 VOL: 0
+;PCODE: $00000092 VOL: 0
+;PCODE: $00000093 VOL: 0
+;PCODE: $00000094 VOL: 0
+; 0000 00BD         lcd_puts(tampil);
+;PCODE: $00000095 VOL: 0
+;PCODE: $00000096 VOL: 0
+; 0000 00BE       }
+; 0000 00BF 
+; 0000 00C0       delay_ms(30);
+;PCODE: $00000097 VOL: 0
+;PCODE: $00000098 VOL: 0
+;PCODE: $00000099 VOL: 0
+;PCODE: $0000009A VOL: 0
+; 0000 00C1       }
+;PCODE: $0000009B VOL: 0
+;PCODE: $0000009C VOL: 0
+; 0000 00C2 }
+;PCODE: $0000009D VOL: 0
+;PCODE: $0000009E VOL: 0
+;PCODE: $0000009F VOL: 0
 
 	.DSEG
-_0x7:
-	.BYTE 0xE
+_0x8:
+	.BYTE 0x1D

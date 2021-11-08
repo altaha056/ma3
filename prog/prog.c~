@@ -158,13 +158,7 @@ lcd_init(16);
 
 while (1)
       {
-      lcd_clear();
-      lcd_gotoxy(0,0); 
-      itoa(detik,tampil);
-      lcd_puts("detik ke-: ");
-      lcd_gotoxy(0,12);
-      lcd_puts(tampil);
-
+      
       delay_ms(30);
       if(PINA.3==0){
         lcd_clear();
@@ -182,6 +176,18 @@ while (1)
         menit++;
         PORTD=angka[menit];
       }
-      
+      if(menit==1){
+        lcd_clear();
+        lcd_gotoxy(0,0);
+        lcd_puts("saatnya bangun");
+      }
+      if(menit!=1){
+        lcd_clear();
+        lcd_gotoxy(0,0); 
+        itoa(detik,tampil);
+        lcd_puts("detik ke-");
+        lcd_gotoxy(0,10);
+        lcd_puts(tampil);
+      }
       }
 }
