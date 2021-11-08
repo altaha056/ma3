@@ -1273,15 +1273,17 @@ _main:
 ; 0000 0031 // Port C initialization
 ; 0000 0032 // Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In
 ; 0000 0033 // State7=T State6=T State5=T State4=T State3=T State2=T State1=T State0=T
-; 0000 0034 PORTC=0x00;
+; 0000 0034 PORTC=0x00; //input
 	OUT  0x15,R30
-; 0000 0035 DDRC=0x00;
+; 0000 0035 DDRC=0xFF; //output
+	LDI  R30,LOW(255)
 	OUT  0x14,R30
 ; 0000 0036 
 ; 0000 0037 // Port D initialization
 ; 0000 0038 // Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In
 ; 0000 0039 // State7=T State6=T State5=T State4=T State3=T State2=T State1=T State0=T
 ; 0000 003A PORTD=0x00;
+	LDI  R30,LOW(0)
 	OUT  0x12,R30
 ; 0000 003B DDRD=0x00;
 	OUT  0x11,R30
@@ -1416,18 +1418,20 @@ _0x3:
 ; 0000 009A       if(PINA.3==0){
 	SBIC 0x19,3
 	RJMP _0x7
-; 0000 009B 
-; 0000 009C         lcd_clear();
+; 0000 009B         lcd_clear();
 	RCALL SUBOPT_0x0
-; 0000 009D         lcd_gotoxy(0,0);
-; 0000 009E         lcd_puts("CEK");
+; 0000 009C         lcd_gotoxy(0,0);
+; 0000 009D         lcd_puts("CEK");
 	__POINTW2MN _0x6,12
 	RCALL SUBOPT_0x1
-; 0000 009F         delay_ms(100);
-; 0000 00A0       }
+; 0000 009E         delay_ms(100);
+; 0000 009F       }
+; 0000 00A0       PORTC=0x46;
+_0x7:
+	LDI  R30,LOW(70)
+	OUT  0x15,R30
 ; 0000 00A1 
 ; 0000 00A2       }
-_0x7:
 	RJMP _0x3
 ; 0000 00A3 }
 _0x8:

@@ -49,8 +49,8 @@ DDRB=0x00;     //mau letak lampu, ubah value di baris ini
 // Port C initialization
 // Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In 
 // State7=T State6=T State5=T State4=T State3=T State2=T State1=T State0=T 
-PORTC=0x00;
-DDRC=0x00;
+PORTC=0x00; //input
+DDRC=0xFF; //output
 
 // Port D initialization
 // Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In 
@@ -152,10 +152,12 @@ while (1)
       lcd_puts("tes tes tes");
       delay_ms(100);
       if(PINA.3==0){
+        lcd_clear();
         lcd_gotoxy(0,0);
         lcd_puts("CEK");
         delay_ms(100);
       }
+      PORTC=46;
       
       }
 }
