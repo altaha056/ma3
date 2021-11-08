@@ -166,6 +166,8 @@ while (1)
         delay_ms(100);
       }
       
+      PORTC=angka[detik];
+      detik++;
       
       }
 }
