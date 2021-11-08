@@ -1069,8 +1069,8 @@ __DELAY_USW_LOOP:
 	.ENDM
 
 ;NAME DEFINITIONS FOR GLOBAL VARIABLES ALLOCATED TO REGISTERS
-	.DEF _i=R4
-	.DEF _detik=R6
+	.DEF _detik=R4
+	.DEF _menit=R6
 	.DEF __lcd_x=R9
 	.DEF __lcd_y=R8
 	.DEF __lcd_maxx=R11
@@ -1113,7 +1113,7 @@ _0x3:
 	.DB  0x40,0x41,0x42,0x43,0x44,0x45,0x46,0x47
 	.DB  0x48,0x49,0x50,0x51,0x52,0x53,0x54,0x55
 	.DB  0x56,0x57,0x58,0x59
-_0xA:
+_0xB:
 	.DB  0x0,0x0
 _0x0:
 	.DB  0x74,0x65,0x73,0x20,0x74,0x65,0x73,0x20
@@ -1136,7 +1136,7 @@ __GLOBAL_INI_TBL:
 
 	.DW  0x02
 	.DW  0x06
-	.DW  _0xA*2
+	.DW  _0xB*2
 
 	.DW  0x02
 	.DW  __base_y_G100
@@ -1263,7 +1263,7 @@ __GLOBAL_INI_END:
 ;#include <delay.h>
 ;
 ;// Declare your global variables here
-;int i,detik=0;
+;int detik,menit=0;
 ;char angka[60]={
 ;0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,
 ;0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,
@@ -1316,7 +1316,8 @@ _main:
 ; 0000 0042 PORTD=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x12,R30
-; 0000 0043 DDRD=0x00;
+; 0000 0043 DDRD=0xFF;
+	LDI  R30,LOW(255)
 	OUT  0x11,R30
 ; 0000 0044 
 ; 0000 0045 // Timer/Counter 0 initialization
@@ -1325,6 +1326,7 @@ _main:
 ; 0000 0048 // Mode: Normal top=0xFF
 ; 0000 0049 // OC0 output: Disconnected
 ; 0000 004A TCCR0=0x00;
+	LDI  R30,LOW(0)
 	OUT  0x33,R30
 ; 0000 004B TCNT0=0x00;
 	OUT  0x32,R30
@@ -1462,24 +1464,48 @@ _0x4:
 	RCALL SUBOPT_0x1
 ; 0000 00A7       }
 ; 0000 00A8 
-; 0000 00A9       PORTC=angka[detik];
+; 0000 00A9       detik++;
 _0x8:
+	MOVW R30,R4
+	ADIW R30,1
+	MOVW R4,R30
+; 0000 00AA       PORTC=angka[detik];
+	LDI  R26,LOW(_angka)
+	LDI  R27,HIGH(_angka)
+	ADD  R26,R4
+	ADC  R27,R5
+	LD   R30,X
+	OUT  0x15,R30
+; 0000 00AB 
+; 0000 00AC 
+; 0000 00AD       if(detik==60){
+	LDI  R30,LOW(60)
+	LDI  R31,HIGH(60)
+	CP   R30,R4
+	CPC  R31,R5
+	BRNE _0x9
+; 0000 00AE         detik=0;
+	CLR  R4
+	CLR  R5
+; 0000 00AF         menit++;
+	MOVW R30,R6
+	ADIW R30,1
+	MOVW R6,R30
+; 0000 00B0         PORTD=angka[menit];
 	LDI  R26,LOW(_angka)
 	LDI  R27,HIGH(_angka)
 	ADD  R26,R6
 	ADC  R27,R7
 	LD   R30,X
-	OUT  0x15,R30
-; 0000 00AA       detik++;
-	MOVW R30,R6
-	ADIW R30,1
-	MOVW R6,R30
-; 0000 00AB 
-; 0000 00AC       }
-	RJMP _0x4
-; 0000 00AD }
+	OUT  0x12,R30
+; 0000 00B1       }
+; 0000 00B2 
+; 0000 00B3       }
 _0x9:
-	RJMP _0x9
+	RJMP _0x4
+; 0000 00B4 }
+_0xA:
+	RJMP _0xA
 
 	.DSEG
 _0x7:

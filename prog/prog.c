@@ -28,7 +28,7 @@ Data Stack size         : 512
 #include <delay.h>
 
 // Declare your global variables here
-int i,detik=0;
+int detik,menit=0;
 char angka[60]={
 0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,
 0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,
@@ -64,7 +64,7 @@ DDRC=0xFF; //output
 // Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In 
 // State7=T State6=T State5=T State4=T State3=T State2=T State1=T State0=T 
 PORTD=0x00;
-DDRD=0x00;
+DDRD=0xFF;
 
 // Timer/Counter 0 initialization
 // Clock source: System Clock
@@ -166,8 +166,15 @@ while (1)
         delay_ms(100);
       }
       
-      PORTC=angka[detik];
       detik++;
+      PORTC=angka[detik];
+      
+      
+      if(detik==60){
+        detik=0;
+        menit++;
+        PORTD=angka[menit];
+      }
       
       }
 }

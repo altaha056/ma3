@@ -52,7 +52,7 @@
 ;#include <delay.h>
 ;
 ;// Declare your global variables here
-;int i,detik=0;
+;int detik,menit=0;
 ;char angka[60]={
 ;0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,
 ;0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,
@@ -107,7 +107,7 @@
 ; 0000 0042 PORTD=0x00;
 ;PCODE: $0000001A VOL: 0
 ;PCODE: $0000001B VOL: 0
-; 0000 0043 DDRD=0x00;
+; 0000 0043 DDRD=0xFF;
 ;PCODE: $0000001C VOL: 0
 ;PCODE: $0000001D VOL: 0
 ; 0000 0044 
@@ -291,24 +291,43 @@
 ;PCODE: $0000006D VOL: 0
 ; 0000 00A7       }
 ; 0000 00A8 
-; 0000 00A9       PORTC=angka[detik];
+; 0000 00A9       detik++;
 ;PCODE: $0000006E VOL: 0
 ;PCODE: $0000006F VOL: 0
 ;PCODE: $00000070 VOL: 0
 ;PCODE: $00000071 VOL: 0
+; 0000 00AA       PORTC=angka[detik];
 ;PCODE: $00000072 VOL: 0
-; 0000 00AA       detik++;
 ;PCODE: $00000073 VOL: 0
 ;PCODE: $00000074 VOL: 0
 ;PCODE: $00000075 VOL: 0
 ; 0000 00AB 
-; 0000 00AC       }
+; 0000 00AC 
+; 0000 00AD       if(detik==60){
 ;PCODE: $00000076 VOL: 0
 ;PCODE: $00000077 VOL: 0
-; 0000 00AD }
 ;PCODE: $00000078 VOL: 0
+; 0000 00AE         detik=0;
 ;PCODE: $00000079 VOL: 0
+; 0000 00AF         menit++;
 ;PCODE: $0000007A VOL: 0
+;PCODE: $0000007B VOL: 0
+;PCODE: $0000007C VOL: 0
+; 0000 00B0         PORTD=angka[menit];
+;PCODE: $0000007D VOL: 0
+;PCODE: $0000007E VOL: 0
+;PCODE: $0000007F VOL: 0
+;PCODE: $00000080 VOL: 0
+; 0000 00B1       }
+; 0000 00B2 
+; 0000 00B3       }
+;PCODE: $00000081 VOL: 0
+;PCODE: $00000082 VOL: 0
+;PCODE: $00000083 VOL: 0
+; 0000 00B4 }
+;PCODE: $00000084 VOL: 0
+;PCODE: $00000085 VOL: 0
+;PCODE: $00000086 VOL: 0
 
 	.DSEG
 _0x7:
