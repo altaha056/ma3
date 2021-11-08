@@ -109,7 +109,7 @@ WarningExternalDeclaredNeverDefined=1
 WarningUnknownPragma=1
 DebugBootLoader=0
 WatchAVR8LAutoVariables=0
-Build=23
+Build=25
 UseEEPROMLocation0=1
 [Assembler]
 OutputFormat=1
@@ -209,8 +209,9 @@ RunUserProg=0
 Files=1
 F1=C:\Users\Altaha\Downloads\ma3\prog\prog.c
 [Header1]
-Files=4
+Files=5
 F1=C:\cvavr2\inc\mega32.h
 F2=C:\cvavr2\inc\mega32_bits.h
-F3=C:\cvavr2\inc\alcd.h
-F4=C:\cvavr2\inc\delay.h
+F3=C:\cvavr2\inc\stdlib.h
+F4=C:\cvavr2\inc\alcd.h
+F5=C:\cvavr2\inc\delay.h

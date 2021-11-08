@@ -23,12 +23,15 @@ Data Stack size         : 512
 
 #include <mega32.h>
 
+#include <stdlib.h>
+
 // Alphanumeric LCD functions
 #include <alcd.h>
 #include <delay.h>
 
 // Declare your global variables here
 int detik,menit=0;
+char tampil[32];
 char angka[60]={
 0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,
 0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,
@@ -156,8 +159,12 @@ lcd_init(16);
 while (1)
       {
       lcd_clear();
-      lcd_gotoxy(0,0);
-      lcd_puts("tes tes tes");
+      lcd_gotoxy(0,0); 
+      itoa(detik,tampil);
+      lcd_puts("detik ke-");
+      lcd_gotoxy(0,10);
+      lcd_puts(tampil);
+
       delay_ms(30);
       if(PINA.3==0){
         lcd_clear();
